@@ -65,7 +65,8 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.json = function (obj) { return function (req) { return (__assign(__assign({}, req), { body: JSON.stringify(obj) })); }; };
+var cross_fetch_1 = require("cross-fetch");
+exports.json = function (obj) { return function (req) { return (__assign(__assign({}, req), { body: JSON.stringify(obj), headers: __assign(__assign({}, req.headers), { 'Content-Type': 'application/json' }) })); }; };
 exports.toJson = function () { return function (req) { return (__assign(__assign({}, req), { onSuccess: __spreadArrays(req.onSuccess, [
         function (response) {
             if (response instanceof Response) {
@@ -116,7 +117,7 @@ exports.build = function () {
         return requestData;
     };
 };
-var fetchImplementation = fetch;
+var fetchImplementation = cross_fetch_1.default;
 exports.run = function (builder) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, url, onBefore, onSuccess, onFailure, onAfter, rest, response, _i, onSuccess_1, cb, e_1, error, _b, onFailure_1, cb;
     return __generator(this, function (_c) {
