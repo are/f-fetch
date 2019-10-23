@@ -1,0 +1,35 @@
+{
+    "name": "f-fetch",
+    "version": "0.1.0",
+    "description": "Functional fetch wrapper",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "test": "ts-node src/index.test.ts | tap-dot"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/are/f-fetch.git"
+    },
+    "keywords": [
+        "fetch",
+        "functional"
+    ],
+    "author": "Artur Wojciechowski <me@iama.re>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/are/f-fetch/issues"
+    },
+    "homepage": "https://github.com/are/f-fetch#readme",
+    "devDependencies": {
+        "@types/tape": "^4.2.33",
+        "tap-dot": "^2.0.0",
+        "tape": "^4.11.0",
+        "ts-node": "^8.4.1",
+        "typescript": "^3.6.4"
+    },
+    "dependencies": {
+        "cross-fetch": "^3.0.4"
+    }
+}
