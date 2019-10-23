@@ -6,7 +6,9 @@
     "types": "dist/index.d.ts",
     "scripts": {
         "build": "tsc",
-        "test": "ts-node src/index.test.ts | tap-dot"
+        "test": "ts-node src/index.test.ts | tap-dot",
+        "prepare": "npm run build",
+        "prepublishOnly": "npm test"
     },
     "repository": {
         "type": "git",
