@@ -1,5 +1,5 @@
 import fetch from 'cross-fetch'
-import { AbortController } from 'abort-controller'
+import * as abort from 'abort-controller'
 
 type RequestData = {
     url: string
@@ -49,7 +49,7 @@ export const method = (method: string) => (req: RequestData): RequestData => ({
 })
 
 export const timeout = (delay: number) => (req: RequestData): RequestData => {
-    const controller = new AbortController()
+    const controller = new abort.AbortController()
 
     const timeoutId = setTimeout(() => {
         controller.abort()
