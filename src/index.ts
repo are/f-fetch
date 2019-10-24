@@ -1,5 +1,5 @@
 import fetch from 'cross-fetch'
-import AbortController from 'abort-controller'
+import * as AbortController from 'abort-controller'
 
 type RequestData = {
     url: string
