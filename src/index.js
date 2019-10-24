@@ -78,7 +78,7 @@ export const when = (predicate, ...middlewares) => req => ({
         ...req.onSuccess,
         response => {
             if (predicate(response)) {
-                const { onSuccess } = build(middlewares)()
+                const { onSuccess } = build(...middlewares)()
 
                 let res = response
                 for (let cb of onSuccess) {
