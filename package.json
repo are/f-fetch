@@ -1,6 +1,6 @@
 {
     "name": "@are1000/f-fetch",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "description": "Functional fetch wrapper",
     "main": "dist/index.js",
     "module": "dist/index.mjs",
