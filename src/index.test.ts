@@ -1,6 +1,6 @@
-import * as test from 'tape'
+const test = require('tape')
 
-import { build, json, method, headers, url, tap } from './index'
+const { build, json, method, headers, url, tap } = require('./index')
 
 test('simple case', t => {
     t.plan(1)
