@@ -20,6 +20,16 @@ export const toJson = () => req => ({
     ],
 })
 
+export const toText = () => req => ({
+    ...req,
+    onSuccess: [
+        ...req.onSuccess,
+        response => {
+            return response.text()
+        },
+    ],
+})
+
 export const tap = cb => req => ({
     ...req,
     onBefore: [...req.onBefore, cb],
@@ -60,6 +70,27 @@ export const headers = headers => req => ({
 export const url = (...fragments) => req => ({
     ...req,
     url: fragments.join('/'),
+})
+
+export const when = (predicate, ...middlewares) => req => ({
+    ...req,
+    onSuccess: [
+        ...req.onSuccess,
+        response => {
+            if (predicate(response)) {
+                const { onSuccess } = build(middlewares)()
+
+                let res = response
+                for (let cb of onSuccess) {
+                    res = cb(res)
+                }
+
+                return res
+            } else {
+                return response
+            }
+        },
+    ],
 })
 
 export const build = (...middlewares) => () => {
@@ -105,5 +136,19 @@ export const run = async builder => {
         throw error
     } finally {
         onAfter.forEach(cb => cb())
+    }
+}
+
+export class Request {
+    constructor(...middlewares) {
+        this.middlewares = middlewares
+    }
+
+    async run() {
+        return run(build(this.middlewares))
+    }
+
+    extend(...middlewares) {
+        return new Request(...this.middlewares, ...middlewares)
     }
 }
