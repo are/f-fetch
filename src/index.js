@@ -1,19 +1,7 @@
 import fetch from 'cross-fetch'
-import * as abort from 'abort-controller'
+import { AbortController } from 'abort-controller'
 
-type RequestData = {
-    url: string
-    method: string
-    headers: Record<string, string>
-    signal?: AbortSignal
-    body?: string
-    onFailure: Array<(error: unknown) => void>
-    onSuccess: Array<(response: unknown) => unknown>
-    onAfter: Array<() => void>
-    onBefore: Array<(url: string, data: Partial<RequestData>) => void>
-}
-
-export const json = (obj: any) => (req: RequestData): RequestData => ({
+export const json = obj => req => ({
     ...req,
     body: JSON.stringify(obj),
     headers: {
@@ -22,11 +10,11 @@ export const json = (obj: any) => (req: RequestData): RequestData => ({
     },
 })
 
-export const toJson = () => (req: RequestData): RequestData => ({
+export const toJson = () => req => ({
     ...req,
     onSuccess: [
         ...req.onSuccess,
-        (response: unknown) => {
+        response => {
             if (response instanceof Response) {
                 return response.json()
             }
@@ -36,20 +24,18 @@ export const toJson = () => (req: RequestData): RequestData => ({
     ],
 })
 
-export const tap = (cb: (url: string, data: Partial<RequestData>) => void) => (
-    req: RequestData,
-): RequestData => ({
+export const tap = cb => req => ({
     ...req,
     onBefore: [...req.onBefore, cb],
 })
 
-export const method = (method: string) => (req: RequestData): RequestData => ({
+export const method = method => req => ({
     ...req,
     method: method,
 })
 
-export const timeout = (delay: number) => (req: RequestData): RequestData => {
-    const controller = new abort.AbortController()
+export const timeout = delay => req => {
+    const controller = new AbortController()
 
     const timeoutId = setTimeout(() => {
         controller.abort()
@@ -67,9 +53,7 @@ export const timeout = (delay: number) => (req: RequestData): RequestData => {
     }
 }
 
-export const headers = <T extends {}>(headers: T) => (
-    req: RequestData,
-): RequestData => ({
+export const headers = headers => req => ({
     ...req,
     headers: {
         ...req.headers,
@@ -77,17 +61,13 @@ export const headers = <T extends {}>(headers: T) => (
     },
 })
 
-export const url = (...fragments: Array<string>) => (
-    req: RequestData,
-): RequestData => ({
+export const url = (...fragments) => req => ({
     ...req,
     url: fragments.join('/'),
 })
 
-export const build = (
-    ...middlewares: Array<(req: RequestData) => RequestData>
-) => (): RequestData => {
-    let requestData: RequestData = {
+export const build = (...middlewares) => () => {
+    let requestData = {
         url: '',
         method: 'GET',
         headers: {},
@@ -106,13 +86,13 @@ export const build = (
 
 let fetchImplementation = fetch
 
-export const run = async (builder: () => RequestData) => {
+export const run = async builder => {
     const { url, onBefore, onSuccess, onFailure, onAfter, ...rest } = builder()
 
     onBefore.forEach(cb => cb(url, rest))
 
     try {
-        let response: unknown = await fetchImplementation(url, rest)
+        let response = await fetchImplementation(url, rest)
 
         for (let cb of onSuccess) {
             response = cb(response)

@@ -4,10 +4,9 @@
     "description": "Functional fetch wrapper",
     "main": "dist/index.js",
     "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
     "scripts": {
         "build": "rollup -c",
-        "test": "ts-node src/index.test.ts | tap-dot",
+        "test": "node src/index.test.js | tap-dot",
         "prepare": "npm run build"
     },
     "repository": {
@@ -25,13 +24,12 @@
     },
     "homepage": "https://github.com/are/f-fetch#readme",
     "devDependencies": {
-        "@types/tape": "^4.2.33",
+        "builtin-modules": "^3.1.0",
         "rollup": "^1.25.2",
-        "rollup-plugin-typescript2": "^0.24.3",
+        "rollup-plugin-commonjs": "^10.1.0",
+        "rollup-plugin-node-resolve": "^5.2.0",
         "tap-dot": "^2.0.0",
-        "tape": "^4.11.0",
-        "ts-node": "^8.4.1",
-        "typescript": "^3.6.4"
+        "tape": "^4.11.0"
     },
     "dependencies": {
         "abort-controller": "^3.0.0",
