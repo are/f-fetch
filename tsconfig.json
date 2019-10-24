@@ -1,9 +1,12 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
-        "target": "es5",
         "declaration": true,
-        "outDir": "dist"
+        "declarationDir": "./dist",
+        "module": "es6",
+        "noImplicitAny": true,
+        "outDir": "./dist",
+        "target": "es5"
     },
-    "include": ["src/index.ts"]
+    "include": ["src/index.ts"],
+    "exclude": ["node_modules"]
 }
