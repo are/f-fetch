@@ -145,7 +145,7 @@ export class Request {
     }
 
     async run() {
-        return run(build(this.middlewares))
+        return run(build(...this.middlewares))
     }
 
     extend(...middlewares) {
