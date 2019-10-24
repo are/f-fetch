@@ -66,7 +66,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var cross_fetch_1 = require("cross-fetch");
-var abort_controller_1 = require("abort-controller");
+var AbortController = require("abort-controller");
 exports.json = function (obj) { return function (req) { return (__assign(__assign({}, req), { body: JSON.stringify(obj), headers: __assign(__assign({}, req.headers), { 'Content-Type': 'application/json' }) })); }; };
 exports.toJson = function () { return function (req) { return (__assign(__assign({}, req), { onSuccess: __spreadArrays(req.onSuccess, [
         function (response) {
@@ -79,7 +79,7 @@ exports.toJson = function () { return function (req) { return (__assign(__assign
 exports.tap = function (cb) { return function (req) { return (__assign(__assign({}, req), { onBefore: __spreadArrays(req.onBefore, [cb]) })); }; };
 exports.method = function (method) { return function (req) { return (__assign(__assign({}, req), { method: method })); }; };
 exports.timeout = function (delay) { return function (req) {
-    var controller = new abort_controller_1.default();
+    var controller = new AbortController();
     var timeoutId = setTimeout(function () {
         controller.abort();
     }, delay);
