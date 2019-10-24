@@ -35,6 +35,13 @@ export const toJson = () => (req: RequestData): RequestData => ({
     ],
 })
 
+export const tap = (cb: (url: string, data: Partial<RequestData>) => void) => (
+    req: RequestData,
+): RequestData => ({
+    ...req,
+    onBefore: [...req.onBefore, cb],
+})
+
 export const method = (method: string) => (req: RequestData): RequestData => ({
     ...req,
     method: method,

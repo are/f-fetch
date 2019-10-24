@@ -11,6 +11,7 @@ declare type RequestData = {
 };
 export declare const json: (obj: any) => (req: RequestData) => RequestData;
 export declare const toJson: () => (req: RequestData) => RequestData;
+export declare const tap: (cb: (url: string, data: Partial<RequestData>) => void) => (req: RequestData) => RequestData;
 export declare const method: (method: string) => (req: RequestData) => RequestData;
 export declare const timeout: (delay: number) => (req: RequestData) => RequestData;
 export declare const headers: <T extends {}>(headers: T) => (req: RequestData) => RequestData;

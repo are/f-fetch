@@ -75,6 +75,7 @@ exports.toJson = function () { return function (req) { return (__assign(__assign
             return response;
         },
     ]) })); }; };
+exports.tap = function (cb) { return function (req) { return (__assign(__assign({}, req), { onBefore: __spreadArrays(req.onBefore, [cb]) })); }; };
 exports.method = function (method) { return function (req) { return (__assign(__assign({}, req), { method: method })); }; };
 exports.timeout = function (delay) { return function (req) {
     var controller = new AbortController();
