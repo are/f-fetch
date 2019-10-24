@@ -15,11 +15,7 @@ export const toJson = () => req => ({
     onSuccess: [
         ...req.onSuccess,
         response => {
-            if (response instanceof Response) {
-                return response.json()
-            }
-
-            return response
+            return response.json()
         },
     ],
 })
