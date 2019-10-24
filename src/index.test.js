@@ -1,5 +1,5 @@
-import test from 'tape'
-import { build, json, method, headers, url, tap } from './index'
+const test = require('tape')
+const { build, json, method, headers, url, tap } = require('../dist/index')
 
 test('simple case', t => {
     t.plan(1)
