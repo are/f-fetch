@@ -9,7 +9,10 @@ export default [
         input: 'src/index.js',
         output: { file: pkg.main, format: 'cjs' },
         external: builtins,
-        plugins: [resolve({ preferBuiltins: true }), commonjs()],
+        plugins: [
+            resolve({ preferBuiltins: true }),
+            commonjs({ ignore: ['encoding'] }),
+        ],
     },
     {
         input: ['src/ops/*.js'],
@@ -17,7 +20,7 @@ export default [
         external: builtins,
         plugins: [
             resolve({ preferBuiltins: true }),
-            commonjs({ ignore: ['encoding'] }),
+            commonjs(),
             multiInput({ relative: 'src/ops/' }),
         ],
     },
