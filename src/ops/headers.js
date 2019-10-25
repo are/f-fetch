@@ -16,7 +16,7 @@ export const headers = obj => {
             ...req,
             headers: {
                 ...req.headers,
-                ...headers,
+                ...obj,
             },
         }))
     }
