@@ -35,6 +35,37 @@ const req = request(
 const entities = await req.run()
 ```
 
+## Usage
+
+To use `f-fetch`, import the module using npm or yarn.
+
+```bash
+npm install @are1000/f-fetch
+```
+
+Then, import the main `request` builder and pass any amount of operators inside.
+
+The operators are not executed until the method `run` is called, so any custom operators
+that contain time sentitive logic is safe.
+
+```js
+const req = request(...)
+
+const response = await req.run()
+```
+
+You can additionally pass values to the `run` function. They will become available
+in certain operators (i.e. `json`).
+
+```js
+const req = request(
+    ...,
+    json((query) => ({ query }))
+)
+
+const response = await req.run('myQuery')
+```
+
 ## Operators
 
 ### Request operators
@@ -46,10 +77,12 @@ Sets the method and the URL of the request.
 After the method, you can pass an arbitrary amount of URL fragments -
 they will be joined using the `/` character.
 
-#### `json(obj: JSON)`
+#### `json(obj: JSON)` | `json((...Args) => JSON)`
 
 Sets the request body to an JSON object (internally uses JSON.stringify).
 It also correctly sets `Content-Type` header.
+
+If you pass a function instead, you can access the arguments from `request().run`.
 
 #### `body(data: string, type: string)`
 
@@ -69,6 +102,11 @@ Appends the request headers.
 #### `when(predicate: (response: Response) => boolean, ...operators: Array<Operator>)`
 
 Conditional operator that executes other operators only on success
+and only if the predicate returns true.
+
+#### `whenError(predicate: (error: Error) => boolean, ...operators: Array<Operator>)`
+
+Conditional operator that executes other operators only on failure
 and only if the predicate returns true.
 
 #### `parse(format: 'json' | 'text' | 'blob' | 'arrayBuffer')`
