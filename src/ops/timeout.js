@@ -1,5 +1,7 @@
 import { strict as assert } from 'assert'
 
+import AbortController from 'abort-controller'
+
 export const timeout = delay => {
     assert.strictEqual(typeof delay, 'number', 'Timeout should be a number.')
 
