@@ -85,10 +85,6 @@ Sets the method and the URL of the request.
 After the method, you can pass an arbitrary amount of URL fragments -
 they will be joined using the `/` character.
 
-#### `baseUrl(url: string)`
-
-Set the URL of the request.
-
 #### `appendUrl(...url: Array<string | number>)`
 
 Join current URL with URL fragments using `/` character. Useful for extending
