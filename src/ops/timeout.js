@@ -18,6 +18,8 @@ export const timeout = delay => {
             timeoutId = setTimeout(() => {
                 controller.abort()
             }, delay)
+
+            return req
         })
 
         request.on('after', () => {
