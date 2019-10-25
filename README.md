@@ -85,6 +85,14 @@ It passes the response object as the first argument to the error constructor.
 
 Maps the response object. Useful for transformations.
 
+### Meta operators
+
+#### `custom(creator: (...Args) => Operator)`
+
+Creates a custom operator. It is used to group common and repeating operators into one.
+
+The creator function has to return an operator instance or an array of operator instances.
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first
