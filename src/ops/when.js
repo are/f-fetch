@@ -9,8 +9,8 @@ export const when = (predicate, ...middlewares) => {
         'Predicate should be a function.',
     )
 
-    return (_, request) => {
-        request.on('success', res => {
+    return request => {
+        request.on('success', (_, res) => {
             if (predicate(res)) {
                 const ri = new RequestInternal()
                 ri.apply(middlewares)

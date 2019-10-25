@@ -3,8 +3,8 @@ import { strict as assert } from 'assert'
 export const error = ErrorClass => {
     assert.strictEqual(typeof ErrorClass, 'function')
 
-    return (_, request) => {
-        request.on('success', res => {
+    return request => {
+        request.on('success', (_, req) => {
             throw new ErrorClass(res)
         })
     }

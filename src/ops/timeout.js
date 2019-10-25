@@ -6,13 +6,13 @@ export const timeout = delay => {
     const controller = new AbortController()
     let timeoutId
 
-    return (_, request) => {
-        request.on('before', req => ({
+    return request => {
+        request.on('before', (_, req) => ({
             ...req,
             signal: controller.signal,
         }))
 
-        request.on('send', req => {
+        request.on('send', (_, req) => {
             timeoutId = setTimeout(() => {
                 controller.abort()
             }, delay)

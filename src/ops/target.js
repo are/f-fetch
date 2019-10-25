@@ -17,8 +17,8 @@ export const target = (method, ...url) => {
     assert.ok(url !== undefined, `URL cannot be undefined.`)
     assert.ok(url !== '', `URL cannot be empty.`)
 
-    return (_, request) => {
-        request.on('before', req => ({
+    return request => {
+        request.on('before', (_, req) => ({
             ...req,
             url: url.map(e => `${e}`).join('/'),
             method: method,

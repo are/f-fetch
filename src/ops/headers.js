@@ -11,8 +11,8 @@ export const headers = obj => {
         )
     }
 
-    return (_, request) => {
-        request.on('before', req => ({
+    return request => {
+        request.on('before', (_, req) => ({
             ...req,
             headers: {
                 ...req.headers,

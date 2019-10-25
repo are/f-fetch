@@ -4,8 +4,8 @@ export const body = (data, type) => {
     assert.ok(data !== undefined, 'Content cannot be undefined.')
     assert.ok(type !== undefined, 'Content type cannot be undefined.')
 
-    return (_, request) => {
-        request.on('before', req => ({
+    return request => {
+        request.on('before', (_, req) => ({
             ...req,
             body: data,
             headers: {
