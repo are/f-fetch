@@ -16,9 +16,9 @@ export default [
         output: { dir: 'operators', format: 'cjs' },
         external: builtins,
         plugins: [
-            multiInput({ relative: 'src/ops/' }),
             resolve({ preferBuiltins: true }),
             commonjs(),
+            multiInput({ relative: 'src/ops/' }),
         ],
     },
 ]

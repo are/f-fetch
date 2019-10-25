@@ -1,11 +1,8 @@
-import fetch from 'cross-fetch'
-
 import { RequestInternal } from './internal'
 
 export class Request {
     constructor() {
         this.ri = new RequestInternal()
-        this.fetch = fetch
     }
 
     build() {
@@ -35,12 +32,12 @@ export class Request {
         return nr
     }
 
-    async run() {
+    async run(fetch) {
         const { url, ...options } = this.build()
 
         this.ri.runHook('send', options)
         try {
-            const response = await this.fetch(url, options)
+            const response = await fetch(url, options)
 
             return this.ri.runHook('success', response.clone())
         } catch (error) {

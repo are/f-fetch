@@ -34,7 +34,6 @@
         "tape": "^4.11.0"
     },
     "dependencies": {
-        "abort-controller": "^3.0.0",
-        "cross-fetch": "^3.0.4"
+        "abort-controller": "^3.0.0"
     }
 }
