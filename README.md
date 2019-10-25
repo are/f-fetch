@@ -46,7 +46,7 @@ npm install @are1000/f-fetch
 Then, import the main `request` builder and pass any amount of operators inside.
 
 The operators are not executed until the method `run` is called, so any custom operators
-that contain time sentitive logic is safe.
+that contain time sentitive logic are safe.
 
 ```js
 const req = request(...)
@@ -64,6 +64,14 @@ const req = request(
 )
 
 const response = await req.run('myQuery')
+```
+
+You can also extend existing requests by adding more operators:
+
+```js
+const req1 = request(...)
+
+const req2 = req1.extend(...)
 ```
 
 ## Operators
