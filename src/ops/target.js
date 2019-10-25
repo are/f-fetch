@@ -1,4 +1,5 @@
 import { strict as assert } from 'assert'
+import template from 'url-template'
 
 const METHODS = [
     'GET',
@@ -18,10 +19,14 @@ export const target = (method, ...url) => {
     assert.ok(url !== '', `URL cannot be empty.`)
 
     return request => {
-        request.on('before', (_, req) => ({
-            ...req,
-            url: url.map(e => `${e}`).join('/'),
-            method: method,
-        }))
+        request.on('before', ([arg], req) => {
+            const fullUrl = template.parse(url.map(e => `${e}`).join('/'))
+
+            return {
+                ...req,
+                url: fullUrl.expand(arg || {}),
+                method: method,
+            }
+        })
     }
 }
