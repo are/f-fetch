@@ -26,7 +26,7 @@ export class RequestInternal {
     }
 
     apply(middlewares) {
-        for (middleware of middlewares) {
+        for (let middleware of middlewares) {
             middleware(this)
         }
     }
