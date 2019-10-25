@@ -9,6 +9,18 @@ export class RequestInternal {
         }
     }
 
+    clone() {
+        const ri = new RequestInternal()
+
+        for (let [key, values] of Object.entries(this.hooks)) {
+            values.forEach(cb => {
+                ri.on(key, cb)
+            })
+        }
+
+        return ri
+    }
+
     on(hook, cb) {
         this.hooks[hook] = [...this.hooks[hook], cb]
     }

@@ -25,6 +25,16 @@ export class Request {
         })
     }
 
+    extend(...middlewares) {
+        const nr = new Request()
+
+        nr.ri = this.ri.clone()
+
+        nr.ri.apply(middlewares)
+
+        return nr
+    }
+
     async run() {
         const { url, ...options } = this.build()
 
