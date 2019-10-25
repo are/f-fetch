@@ -9,7 +9,7 @@ export const when = (predicate, ...middlewares) => {
         'Predicate should be a function.',
     )
 
-    return request => {
+    return (_, request) => {
         request.on('success', res => {
             if (predicate(res)) {
                 const ri = new RequestInternal()

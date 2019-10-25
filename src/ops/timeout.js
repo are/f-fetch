@@ -6,7 +6,7 @@ export const timeout = delay => {
     const controller = new AbortController()
     let timeoutId
 
-    return request => {
+    return (_, request) => {
         request.on('before', req => ({
             ...req,
             signal: controller.signal,

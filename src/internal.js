@@ -31,12 +31,18 @@ export class RequestInternal {
         }
     }
 
-    runHook(hook, data) {
+    runHook(hook, data, args) {
         const hooks = this.hooks[hook]
 
         let res = data
         for (let cb of hooks) {
-            res = cb(res)
+            const ires = cb(args, res)
+
+            if (typeof ires === 'function') {
+                res = ires(args, res)
+            } else {
+                res = ires
+            }
         }
 
         return res

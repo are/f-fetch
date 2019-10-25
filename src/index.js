@@ -1,25 +1,31 @@
 import { RequestInternal } from './internal'
 
+import 'cross-fetch/polyfill'
+
 export class Request {
     constructor() {
         this.ri = new RequestInternal()
     }
 
-    build() {
-        return this.ri.runHook('before', {
-            url: '',
-            method: 'GET',
-            headers: {},
-            signal: undefined,
-            mode: undefined,
-            credentials: undefined,
-            cache: undefined,
-            redirect: undefined,
-            referrer: undefined,
-            referrerPolicy: undefined,
-            integrity: undefined,
-            keepalive: undefined,
-        })
+    build(args) {
+        return this.ri.runHook(
+            'before',
+            {
+                url: '',
+                method: 'GET',
+                headers: {},
+                signal: undefined,
+                mode: undefined,
+                credentials: undefined,
+                cache: undefined,
+                redirect: undefined,
+                referrer: undefined,
+                referrerPolicy: undefined,
+                integrity: undefined,
+                keepalive: undefined,
+            },
+            args,
+        )
     }
 
     extend(...middlewares) {
@@ -32,18 +38,18 @@ export class Request {
         return nr
     }
 
-    async run(fetch) {
-        const { url, ...options } = this.build()
+    async run(...args) {
+        const { url, ...options } = this.build(args)
 
-        this.ri.runHook('send', options)
+        this.ri.runHook('send', options, args)
         try {
             const response = await fetch(url, options)
 
-            return this.ri.runHook('success', response.clone())
+            return this.ri.runHook('success', response.clone(), args)
         } catch (error) {
-            return this.ri.runHook('failure', error)
+            return this.ri.runHook('failure', error, args)
         } finally {
-            this.ri.runHook('after', null)
+            this.ri.runHook('after', null, args)
         }
     }
 }
