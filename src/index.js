@@ -1,154 +1,52 @@
 import fetch from 'cross-fetch'
-import { AbortController } from 'abort-controller'
 
-export const json = obj => req => ({
-    ...req,
-    body: JSON.stringify(obj),
-    headers: {
-        ...req.headers,
-        'Content-Type': 'application/json',
-    },
-})
-
-export const toJson = () => req => ({
-    ...req,
-    onSuccess: [
-        ...req.onSuccess,
-        response => {
-            return response.json()
-        },
-    ],
-})
-
-export const toText = () => req => ({
-    ...req,
-    onSuccess: [
-        ...req.onSuccess,
-        response => {
-            return response.text()
-        },
-    ],
-})
-
-export const tap = cb => req => ({
-    ...req,
-    onBefore: [...req.onBefore, cb],
-})
-
-export const method = method => req => ({
-    ...req,
-    method: method,
-})
-
-export const timeout = delay => req => {
-    const controller = new AbortController()
-
-    const timeoutId = setTimeout(() => {
-        controller.abort()
-    }, delay)
-
-    return {
-        ...req,
-        signal: controller.signal,
-        onAfter: [
-            ...req.onAfter,
-            () => {
-                clearTimeout(timeoutId)
-            },
-        ],
-    }
-}
-
-export const headers = headers => req => ({
-    ...req,
-    headers: {
-        ...req.headers,
-        ...headers,
-    },
-})
-
-export const url = (...fragments) => req => ({
-    ...req,
-    url: fragments.join('/'),
-})
-
-export const when = (predicate, ...middlewares) => req => ({
-    ...req,
-    onSuccess: [
-        ...req.onSuccess,
-        response => {
-            if (predicate(response)) {
-                const { onSuccess } = build(...middlewares)()
-
-                let res = response
-                for (let cb of onSuccess) {
-                    res = cb(res)
-                }
-
-                return res
-            } else {
-                return response
-            }
-        },
-    ],
-})
-
-export const build = (...middlewares) => () => {
-    let requestData = {
-        url: '',
-        method: 'GET',
-        headers: {},
-        onFailure: [],
-        onSuccess: [],
-        onAfter: [],
-        onBefore: [],
-    }
-
-    for (let middleware of middlewares) {
-        requestData = middleware(requestData)
-    }
-
-    return requestData
-}
-
-let fetchImplementation = fetch
-
-export const run = async builder => {
-    const { url, onBefore, onSuccess, onFailure, onAfter, ...rest } = builder()
-
-    onBefore.forEach(cb => cb(url, rest))
-
-    try {
-        let response = await fetchImplementation(url, rest)
-
-        for (let cb of onSuccess) {
-            response = cb(response)
-        }
-
-        return response
-    } catch (e) {
-        let error = e
-
-        for (let cb of onFailure) {
-            error = cb(error)
-        }
-
-        throw error
-    } finally {
-        onAfter.forEach(cb => cb())
-    }
-}
+import { RequestInternal } from './internal'
 
 export class Request {
-    constructor(...middlewares) {
-        this.middlewares = middlewares
+    constructor() {
+        this.ri = new RequestInternal()
+        this.fetch = fetch
+    }
+
+    build() {
+        return this.ri.runHook('before', {
+            url: '',
+            method: 'GET',
+            headers: {},
+            signal: undefined,
+            mode: undefined,
+            credentials: undefined,
+            cache: undefined,
+            redirect: undefined,
+            referrer: undefined,
+            referrerPolicy: undefined,
+            integrity: undefined,
+            keepalive: undefined,
+        })
     }
 
     async run() {
-        return run(build(...this.middlewares))
-    }
+        const { url, ...options } = this.build()
 
-    extend(...middlewares) {
-        return new Request(...this.middlewares, ...middlewares)
+        this.ri.runHook('send', options)
+        try {
+            const response = await this.fetch(url, options)
+
+            return this.ri.runHook('success', response.clone())
+        } catch (error) {
+            return this.ri.runHook('failure', error)
+        } finally {
+            this.ri.runHook('after', null)
+        }
     }
 }
+
+export const request = (...middlewares) => {
+    const r = new Request()
+
+    r.ri.apply(middlewares)
+
+    return r
+}
+
+export { RequestInternal } from './internal'
