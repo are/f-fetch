@@ -17,7 +17,7 @@ export default [
         external: builtins,
         plugins: [
             resolve({ preferBuiltins: true }),
-            commonjs(),
+            commonjs({ ignore: ['encoding'] }),
             multiInput({ relative: 'src/ops/' }),
         ],
     },
