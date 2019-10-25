@@ -2,7 +2,7 @@ import { strict as assert } from 'assert'
 
 import { RequestInternal } from '../internal'
 
-export const when = (predicate, ...middlewares) => {
+export const whenError = (predicate, ...middlewares) => {
     assert.strictEqual(
         typeof predicate,
         'function',
