@@ -47,7 +47,13 @@ export class Request {
 
             return this.ri.runHook('success', response.clone(), args)
         } catch (error) {
-            return this.ri.runHook('failure', error, args)
+            const resultingError = this.ri.runHook('failure', error, args)
+
+            if (resultingError instanceof Error) {
+                throw resultingError
+            } else {
+                return resultingError
+            }
         } finally {
             this.ri.runHook('after', null, args)
         }
