@@ -2,3 +2,4 @@ src
 test
 package-lock.json
 .prettierrc
+rollup.config.js
