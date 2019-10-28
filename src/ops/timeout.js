@@ -5,16 +5,18 @@ import AbortController from 'abort-controller'
 export const timeout = delay => {
     assert.strictEqual(typeof delay, 'number', 'Timeout should be a number.')
 
-    const controller = new AbortController()
-    let timeoutId
-
     return request => {
+        let controller
+        let timeoutId
+
         request.on('before', (_, req) => ({
             ...req,
             signal: controller.signal,
         }))
 
         request.on('send', (_, req) => {
+            controller = new AbortController()
+
             timeoutId = setTimeout(() => {
                 controller.abort()
             }, delay)
