@@ -7,8 +7,20 @@ export class Request {
         this.ri = new RequestInternal()
     }
 
-    async build(args) {
-        return this.ri.runHook(
+    extend(...middlewares) {
+        const nr = new Request()
+
+        nr.ri = this.ri.clone()
+
+        nr.ri.apply(middlewares)
+
+        return nr
+    }
+
+    async run(...args) {
+        const ctx = new Map()
+
+        const { url, ...options } = await this.ri.runHook(
             'before',
             {
                 url: '',
@@ -25,29 +37,21 @@ export class Request {
                 keepalive: undefined,
             },
             args,
+            ctx,
         )
-    }
 
-    extend(...middlewares) {
-        const nr = new Request()
-
-        nr.ri = this.ri.clone()
-
-        nr.ri.apply(middlewares)
-
-        return nr
-    }
-
-    async run(...args) {
-        const { url, ...options } = await this.build(args)
-
-        await this.ri.runHook('send', { url, ...options }, args)
+        await this.ri.runHook('send', { url, ...options }, args, ctx)
         try {
             const response = await fetch(url, options)
 
-            return this.ri.runHook('success', response.clone(), args)
+            return this.ri.runHook('success', response.clone(), args, ctx)
         } catch (error) {
-            const resultingError = await this.ri.runHook('failure', error, args)
+            const resultingError = await this.ri.runHook(
+                'failure',
+                error,
+                args,
+                ctx,
+            )
 
             if (resultingError instanceof Error) {
                 throw resultingError
@@ -55,7 +59,8 @@ export class Request {
                 return resultingError
             }
         } finally {
-            await this.ri.runHook('after', null, args)
+            await this.ri.runHook('after', null, args, ctx)
+            delete ctx
         }
     }
 }
