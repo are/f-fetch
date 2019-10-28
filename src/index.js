@@ -41,7 +41,7 @@ export class Request {
     async run(...args) {
         const { url, ...options } = await this.build(args)
 
-        await this.ri.runHook('send', options, args)
+        await this.ri.runHook('send', { url, ...options }, args)
         try {
             const response = await fetch(url, options)
 
