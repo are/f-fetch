@@ -13,7 +13,7 @@ export const project = (keys, mapper = x => x) => {
             const isCollection = Array.isArray(res)
             const data = isCollection ? res : [res]
 
-            const result = res.map(entry => {
+            const result = data.map(entry => {
                 return mapper(
                     Object.entries(entry).reduce((acc, [key, value]) => {
                         if (keys.includes(key)) {
