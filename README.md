@@ -141,6 +141,10 @@ Maps the response object. Useful for transformations.
 When the response is an array of objects, it transforms the objects in such a way,
 that only the keys that are included in the argument go through.
 
+#### `prop(key: string)`
+
+When the response is an object, return the value of key. Otherwise returns null.
+
 ### Meta operators
 
 #### `custom(creator: (...Args) => Operator)`
