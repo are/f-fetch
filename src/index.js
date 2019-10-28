@@ -60,7 +60,6 @@ export class Request {
             }
         } finally {
             await this.ri.runHook('after', null, args, ctx)
-            delete ctx
         }
     }
 }
