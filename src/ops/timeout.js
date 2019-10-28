@@ -6,7 +6,7 @@ export const timeout = delay => {
     assert.strictEqual(typeof delay, 'number', 'Timeout should be a number.')
 
     return request => {
-        let controller
+        let controller = new AbortController()
         let timeoutId
 
         request.on('before', (_, req) => ({
@@ -15,8 +15,6 @@ export const timeout = delay => {
         }))
 
         request.on('send', (_, req) => {
-            controller = new AbortController()
-
             timeoutId = setTimeout(() => {
                 controller.abort()
             }, delay)
