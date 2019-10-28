@@ -10,9 +10,10 @@ export const project = (keys, mapper = x => x) => {
 
     return request => {
         request.on('success', (_, res) => {
-            assert.ok(Array.isArray(res), `Data should be an array.`)
+            const isCollection = Array.isArray(res)
+            const data = isCollection ? res : [res]
 
-            return res.map(entry => {
+            const result = res.map(entry => {
                 return mapper(
                     Object.entries(entry).reduce((acc, [key, value]) => {
                         if (keys.includes(key)) {
@@ -23,6 +24,8 @@ export const project = (keys, mapper = x => x) => {
                     }, {}),
                 )
             })
+
+            return isCollection ? result : result[0]
         })
     }
 }
