@@ -31,15 +31,15 @@ export class RequestInternal {
         }
     }
 
-    runHook(hook, data, args) {
+    async runHook(hook, data, args) {
         const hooks = this.hooks[hook]
 
         let res = data
         for (let cb of hooks) {
-            const ires = cb(args, res)
+            const ires = await cb(args, res)
 
             if (typeof ires === 'function') {
-                res = ires(args, res)
+                res = await ires(args, res)
             } else {
                 res = ires
             }

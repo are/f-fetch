@@ -7,7 +7,7 @@ export class Request {
         this.ri = new RequestInternal()
     }
 
-    build(args) {
+    async build(args) {
         return this.ri.runHook(
             'before',
             {
@@ -39,15 +39,15 @@ export class Request {
     }
 
     async run(...args) {
-        const { url, ...options } = this.build(args)
+        const { url, ...options } = await this.build(args)
 
-        this.ri.runHook('send', options, args)
+        await this.ri.runHook('send', options, args)
         try {
             const response = await fetch(url, options)
 
             return this.ri.runHook('success', response.clone(), args)
         } catch (error) {
-            const resultingError = this.ri.runHook('failure', error, args)
+            const resultingError = await this.ri.runHook('failure', error, args)
 
             if (resultingError instanceof Error) {
                 throw resultingError
@@ -55,7 +55,7 @@ export class Request {
                 return resultingError
             }
         } finally {
-            this.ri.runHook('after', null, args)
+            await this.ri.runHook('after', null, args)
         }
     }
 }
