@@ -136,6 +136,11 @@ It passes the response object as the first argument to the error constructor.
 
 Maps the response object. Useful for transformations.
 
+#### `project(keys: Array<string>)`
+
+When the response is an array of objects, it transforms the objects in such a way,
+that only the keys that are included in the argument go through.
+
 ### Meta operators
 
 #### `custom(creator: (...Args) => Operator)`
