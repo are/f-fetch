@@ -156,6 +156,10 @@ Creates a custom operator. It is used to group common and repeating operators in
 
 The creator function has to return an operator instance or an array of operator instances.
 
+#### `hook(hookName: string, handler: (args, { params, data, ctx }))`
+
+Hooks into internals of `f-fetch`. Only use if you know what you are doing!
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first
