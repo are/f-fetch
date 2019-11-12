@@ -9,7 +9,7 @@ export const project = (keys, mapper = x => x) => {
     )
 
     return request => {
-        request.on('success', (_, res) => {
+        request.on('success', (args, res) => {
             const isCollection = Array.isArray(res)
             const data = isCollection ? res : [res]
 
@@ -22,6 +22,7 @@ export const project = (keys, mapper = x => x) => {
 
                         return acc
                     }, {}),
+                    args,
                 )
 
                 return [
