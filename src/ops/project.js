@@ -22,7 +22,7 @@ export const project = (keys, mapper = x => x) => {
 
                         return acc
                     }, {}),
-                    args,
+                    ...args,
                 )
 
                 return [

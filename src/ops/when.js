@@ -10,12 +10,12 @@ export const when = (predicate, ...middlewares) => {
     )
 
     return request => {
-        request.on('success', (_, res) => {
+        request.on('success', (args, res, ctx) => {
             if (predicate(res)) {
                 const ri = new RequestInternal()
                 ri.apply(middlewares)
 
-                return ri.runHook('success', res)
+                return ri.runHook('success', res, args, ctx)
             }
 
             return res
