@@ -44,7 +44,7 @@ export class Request {
         try {
             const response = await fetch(url, options)
 
-            return this.ri.runHook('success', response.clone(), args, ctx)
+            return await this.ri.runHook('success', response.clone(), args, ctx)
         } catch (error) {
             const resultingError = await this.ri.runHook(
                 'failure',
